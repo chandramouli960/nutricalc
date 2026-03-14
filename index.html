@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nutrition & BMI Calculator</title>
+    <title>Nutrition Calculator – Indian Standard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
@@ -16,7 +16,7 @@
           <span class="brand-mark">NC</span>
           <div class="brand-text">
             <h1>Nutrition Calculator</h1>
-            <p>Industry-standard BMI, BMR & macro estimates</p>
+            <p>Indian standard – BMI, BMR, IBW & macro estimates</p>
           </div>
         </div>
       </header>
@@ -24,10 +24,7 @@
       <main class="app-main">
         <nav class="tabs" aria-label="Calculator type">
           <button class="tab tab-active" type="button" data-tab-target="bmi">
-            BMI
-          </button>
-          <button class="tab" type="button" data-tab-target="energy">
-            BMR &amp; TDEE
+            BMI &amp; Energy
           </button>
           <button class="tab" type="button" data-tab-target="macros">
             Macros &amp; Food
@@ -35,9 +32,9 @@
         </nav>
 
         <section class="panel tab-panel tab-panel-active" data-tab-panel="bmi">
-          <h2>BMI Calculator</h2>
+          <h2>BMI &amp; Energy</h2>
           <p class="panel-subtitle">
-            Body Mass Index using the standard formula based on height and weight.
+            Enter your details once. BMI (Indian cutoffs), IBW, recommended calories, and BMR/TDEE below.
           </p>
           <form id="bmi-form" class="form-grid">
             <div class="field-group field-group-inline">
@@ -56,7 +53,6 @@
                 min="0"
                 step="0.1"
                 placeholder="e.g. 70"
-                required
               />
             </div>
             <div class="field-group" data-metric-only>
@@ -67,7 +63,6 @@
                 min="0"
                 step="0.1"
                 placeholder="e.g. 175"
-                required
               />
             </div>
 
@@ -84,25 +79,33 @@
             <div class="field-group field-pair" data-imperial-only>
               <label>Height (ft / in)</label>
               <div class="field-inline">
-                <input
-                  type="number"
-                  id="bmi-height-ft"
-                  min="0"
-                  step="1"
-                  placeholder="ft"
-                />
-                <input
-                  type="number"
-                  id="bmi-height-in"
-                  min="0"
-                  step="1"
-                  placeholder="in"
-                />
+                <input type="number" id="bmi-height-ft" min="0" step="1" placeholder="ft" />
+                <input type="number" id="bmi-height-in" min="0" step="1" placeholder="in" />
               </div>
             </div>
 
+            <div class="field-group">
+              <label for="energy-sex">Sex</label>
+              <select id="energy-sex">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="energy-age">Age (years)</label>
+              <input type="number" id="energy-age" min="0" step="1" placeholder="e.g. 30" />
+            </div>
+            <div class="field-group field-group-span2">
+              <label for="energy-activity">Activity level</label>
+              <select id="energy-activity">
+                <option value="sedentary">Sedentary</option>
+                <option value="moderate">Moderate</option>
+                <option value="heavy">Heavy</option>
+              </select>
+            </div>
+
             <button type="submit" class="primary-btn full-width">
-              Calculate BMI
+              Calculate
             </button>
           </form>
 
@@ -114,87 +117,46 @@
             <div class="result-meta">
               <span class="chip" id="bmi-category">Category: –</span>
             </div>
+            <div class="result-main">
+              <span class="result-label">IBW</span>
+              <span class="result-value" id="bmi-ibw">–</span>
+              <span class="result-unit">kg</span>
+            </div>
+            <div class="result-subsection">
+              <div class="result-main">
+                <span class="result-label" id="bmi-cal-label">Recommended calories</span>
+                <span class="result-value" id="bmi-cal-value">–</span>
+                <span class="result-unit">kcal/day</span>
+              </div>
+              <div class="result-subsection macro-breakdown-recommended">
+                <div class="result-subtitle">Caloric breakdown (60% carbs, 20% protein, 20% fat)</div>
+                <div class="result-main">
+                  <span class="result-label">Carbs</span>
+                  <span class="result-value" id="rec-carb-kcal">–</span>
+                  <span class="result-unit">kcal</span>
+                  <span class="result-gram" id="rec-carb-g">– g</span>
+                </div>
+                <div class="result-main">
+                  <span class="result-label">Protein</span>
+                  <span class="result-value" id="rec-protein-kcal">–</span>
+                  <span class="result-unit">kcal</span>
+                  <span class="result-gram" id="rec-protein-g">– g</span>
+                </div>
+                <div class="result-main">
+                  <span class="result-label">Fat</span>
+                  <span class="result-value" id="rec-fat-kcal">–</span>
+                  <span class="result-unit">kcal</span>
+                  <span class="result-gram" id="rec-fat-g">– g</span>
+                </div>
+              </div>
+            </div>
             <p class="result-note">
-              BMI is a screening tool and not a diagnosis. It does not account for
-              factors like muscle mass or body composition.
+              Indian/Asian BMI categories. IBW = height (m)² × 22. Recommended calories = IBW × 25 (Sedentary), 30 (Moderate), or 35 (Heavy). Reference only; not a substitute for clinical advice.
             </p>
           </div>
-        </section>
 
-        <section class="panel tab-panel" data-tab-panel="energy">
-          <h2>Energy Needs (BMR & TDEE)</h2>
-          <p class="panel-subtitle">
-            Mifflin–St Jeor equation with activity factors for daily calorie estimates.
-          </p>
-          <form id="energy-form" class="form-grid">
-            <div class="field-group">
-              <label for="energy-sex">Sex</label>
-              <select id="energy-sex" required>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
-            </div>
-
-            <div class="field-group">
-              <label for="energy-age">Age (years)</label>
-              <input
-                type="number"
-                id="energy-age"
-                min="0"
-                step="1"
-                placeholder="e.g. 30"
-                required
-              />
-            </div>
-
-            <div class="field-group">
-              <label for="energy-weight-kg">Weight (kg)</label>
-              <input
-                type="number"
-                id="energy-weight-kg"
-                min="0"
-                step="0.1"
-                placeholder="e.g. 70"
-                required
-              />
-            </div>
-
-            <div class="field-group">
-              <label for="energy-height-cm">Height (cm)</label>
-              <input
-                type="number"
-                id="energy-height-cm"
-                min="0"
-                step="0.1"
-                placeholder="e.g. 175"
-                required
-              />
-            </div>
-
-            <div class="field-group field-group-span2">
-              <label for="energy-activity">Activity level</label>
-              <select id="energy-activity" required>
-                <option value="1.2">Sedentary – little or no exercise</option>
-                <option value="1.375">
-                  Lightly active – light exercise 1–3 days/week
-                </option>
-                <option value="1.55">
-                  Moderately active – exercise 3–5 days/week
-                </option>
-                <option value="1.725">
-                  Very active – hard exercise 6–7 days/week
-                </option>
-                <option value="1.9">
-                  Extra active – very hard exercise / physical job
-                </option>
-              </select>
-            </div>
-
-            <button type="submit" class="primary-btn full-width">
-              Calculate BMR &amp; TDEE
-            </button>
-          </form>
-
+          <div class="panel-divider"></div>
+          <h3 class="panel-h3">BMR &amp; TDEE (Mifflin–St Jeor)</h3>
           <div id="energy-result" class="result-card">
             <div class="result-main">
               <span class="result-label">BMR</span>
@@ -206,18 +168,14 @@
               <span class="result-value" id="tdee-value">–</span>
               <span class="result-unit">kcal/day</span>
             </div>
-            <p class="result-note">
-              BMR is your estimated energy use at rest. TDEE is your estimated
-              total daily energy expenditure after activity.
-            </p>
+            <p class="result-note">BMR = energy at rest. TDEE = total daily expenditure after activity.</p>
           </div>
         </section>
 
         <section class="panel tab-panel" data-tab-panel="macros">
           <h2>Macro & Food Calories</h2>
           <p class="panel-subtitle">
-            Standard macro energy values (4/4/9/7 kcal per gram) plus quick lookups
-            for oils and common items.
+            Standard macro values (4/4/9/7 kcal/g) and quick lookups for Indian staples (roti, dal, idli, ghee, etc.).
           </p>
 
           <div class="stack-vertical">
@@ -302,24 +260,19 @@
               <div class="field-group field-group-span2">
                 <label for="food-item">Food</label>
                 <select id="food-item">
-                  <option value="olive_oil_tbsp">
-                    Olive oil – 1 tbsp (~13.5 g fat)
-                  </option>
-                  <option value="canola_oil_tbsp">
-                    Canola oil – 1 tbsp (~13.6 g fat)
-                  </option>
-                  <option value="butter_tbsp">
-                    Butter – 1 tbsp (~11.5 g fat, 0.1 g prot, 0 g carb)
-                  </option>
-                  <option value="rice_cup_cooked">
-                    White rice – 1 cup cooked (~45 g carb, 4 g prot, 0.4 g fat)
-                  </option>
-                  <option value="chicken_100g_cooked">
-                    Chicken breast – 100 g cooked (~31 g prot, 3.6 g fat)
-                  </option>
-                  <option value="almonds_28g">
-                    Almonds – 28 g (~6 g prot, 6 g carb, 14 g fat)
-                  </option>
+                  <option value="rice_cup_cooked">Rice (cooked) – 1 katori / 1 cup</option>
+                  <option value="roti_one">Roti / Chapati – 1 medium (35 g)</option>
+                  <option value="dal_cup_cooked">Dal (cooked) – 1 katori / 1 cup</option>
+                  <option value="idli_one">Idli – 1 piece (50 g)</option>
+                  <option value="dosa_one">Dosa – 1 medium</option>
+                  <option value="curd_100g">Curd / Dahi – 100 g</option>
+                  <option value="ghee_tbsp">Ghee – 1 tbsp (~14 g)</option>
+                  <option value="paneer_100g">Paneer – 100 g</option>
+                  <option value="mustard_oil_tbsp">Mustard oil – 1 tbsp</option>
+                  <option value="olive_oil_tbsp">Olive oil – 1 tbsp</option>
+                  <option value="butter_tbsp">Butter – 1 tbsp</option>
+                  <option value="chicken_100g_cooked">Chicken – 100 g cooked</option>
+                  <option value="almonds_28g">Almonds / Badam – 28 g</option>
                 </select>
               </div>
 
